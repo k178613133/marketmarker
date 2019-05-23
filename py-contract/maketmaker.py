@@ -11,7 +11,7 @@ from huobi.RESTPython3.HuobiDMService import HuobiDM #火币合约代码
 from tool.logtool.logger import Logger #日志系统代码
  
 #初始化日志系统
-x = Logger("debug")
+log = Logger("debug")
 '''日志系统调用方法和级别
 x.critical("这是一个 critical 级别的问题！")
 x.error("这是一个 error 级别的问题！")
@@ -21,7 +21,7 @@ x.debug("这是一个 debug 级别的问题！")
 '''
 
 #读取配置文件
-Info = json.load(open('btc.json')); x.info("配置文件信息读取");x.info(Info)
+Info = json.load(open('btc.json')); log.info("配置文件信息读取");log.info(Info)
  
 initCounter = Info['initCounter']
 baseInfo = Info['baseInfo']
