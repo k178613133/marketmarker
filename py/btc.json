@@ -1,13 +1,13 @@
 {
 	"URL" : "wss://real.okex.com:10441/websocket",
-	"initCounter" : 0.00367431,
+	"initCounter" : 0.00283728,
 	"baseInfo" : [
 	{
 		"currency" : "BTC"
 	},
 	{ 
 		"currency" : "HT", 
-		"initPrice" : 0.00037450,
+		"initPrice" : 0.00038108,
 		"lowLimit" : 0.00030208,
 		"highLimit" : 0.00040208,
 		"gap" : 4,
