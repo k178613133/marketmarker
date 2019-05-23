@@ -7,7 +7,7 @@
 	},
 	{ 
 		"currency" : "HT", 
-		"initPrice" : 0.00037370,
+		"initPrice" : 0.00037309,
 		"lowLimit" : 0.00030208,
 		"highLimit" : 0.00040208,
 		"gap" : 1,
@@ -15,7 +15,7 @@
 		"rate" : 1.005,
 		"initBase" :0.76610098,
 		"tradeAmount" : 0.1,
-		"orderLength" : 3
+		"orderLength" : 5
 	}
  
 	]
