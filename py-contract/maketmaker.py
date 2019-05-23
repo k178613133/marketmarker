@@ -6,12 +6,23 @@ from numpy import NaN
 import math
 import sys
 from pprint import pprint
-import tool
-from huobi.RESTPython3.HuobiDMService import HuobiDM
+from tool.orderTool import createOrderId #生成订单号
+from huobi.RESTPython3.HuobiDMService import HuobiDM #火币合约代码
+from tool.logtool.logger import Logger #日志系统代码
+ 
+#初始化日志系统
+x = Logger("debug")
+'''日志系统调用方法和级别
+x.critical("这是一个 critical 级别的问题！")
+x.error("这是一个 error 级别的问题！")
+x.warning("这是一个 warning 级别的问题！")
+x.info("这是一个 info 级别的问题！")
+x.debug("这是一个 debug 级别的问题！")
+'''
 
 #读取配置文件
-Info = json.load(open('btc.json'))
-
+Info = json.load(open('btc.json')); x.info("配置文件信息读取");x.info(Info)
+ 
 initCounter = Info['initCounter']
 baseInfo = Info['baseInfo']
 Names = [info['currency'] for info in baseInfo]
