@@ -9,7 +9,7 @@ import math
 import sys
 from pprint import pprint
 
-Info = json.load(open(sys.argv[1]))
+Info = json.load(open('btc.json'))
 
 initCounter = Info['initCounter']
 baseInfo = Info['baseInfo']
