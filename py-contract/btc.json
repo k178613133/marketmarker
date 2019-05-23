@@ -1,0 +1,27 @@
+ 
+
+{	
+	"initCounter" : 0.056,
+	"baseInfo":[
+		{
+			"currency" : "BTC"
+		},
+		{
+			"currency" : "BTC",
+			"initPrice" :7713, 
+			"lowLimit" : 7200, 
+			"highLimit" :8200, 
+			"gap" : 0.03,
+			"rate" : 1.0002, 
+			"initBase" : 0, 
+			"tradeAmount" :1,
+			"minAmount":1, 
+			"orderLength" :3,
+			"leverRate":10,
+			"priceUSD":100,
+			"direction":"buy",
+			"offset":"open"
+		}
+	]
+}
+

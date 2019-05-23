@@ -1,0 +1,28 @@
+ 
+
+{	
+	"initCounter" : 0.056,//初始BTC数量
+	"baseInfo":[
+		{
+			"currency" : "BTC"
+		},         
+ 
+		{
+		"currency" : "BTC",//合约数字货币种类
+		"initPrice" :7740, //基准价格
+		"lowLimit" : 7200, //最低价格
+		"highLimit" :8200, //最高价格
+		"gap" : 0.03,//这里用来调整最低买单和最高卖单的价格
+		"rate" : 1.0002,//差价间距 0.002% 
+		"initBase" : 0, //持有的合约数量
+		"tradeAmount" :1,//交易数量
+		"minAmount":0.8, //最小数量
+		"orderLength" :3,//合约购买张数
+		"leverRate":10,//杠杆倍数
+		"priceUSD":100,//合约面值
+		"direction":"buy",//开仓操作，暂时还没有使用这个值
+		"offset":"open"//平仓操作，暂时还没有使用这个值
+	}
+	]
+}
+
