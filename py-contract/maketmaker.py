@@ -21,7 +21,7 @@ x.debug("这是一个 debug 级别的问题！")
 '''
 
 #读取配置文件
-Info = json.load(open('btc.json')); log.info("配置文件信息读取");log.info(Info)
+Info = json.load(open('contract.json')); log.info("配置文件信息读取");log.info(Info)
  
 initCounter = Info['initCounter']
 baseInfo = Info['baseInfo']
@@ -68,9 +68,10 @@ def checkMyOrders(index, orders, targetOrders, Type):
         if flagUseless:
 			#cancelOrder(index, seq)
 			#try:
-            print (u'##撤销订单')
-			
-            pprint(dm.cancel_contract_order(symbol=Names[index], order_id=str(seq)))
+            # print (u'##撤销订单')
+            log.info('撤销订单');
+            # pprint(dm.cancel_contract_order(symbol=Names[index], order_id=str(seq)))
+            log.info(dm.cancel_contract_order(symbol=Names[index], order_id=str(seq)))
 			# print (exchange.cancelOrder(id = str(seq), symbol = Names[index]+'/'+Names[0]))
 
 			#except:
@@ -82,64 +83,64 @@ def checkMyOrders(index, orders, targetOrders, Type):
         leverRate = target[2]
 
         #createMarketOrder(index, Type, price, amount)
-        print (Names[index]+'/'+Names[0], Type, str(orderprice), str(orderamount))
+        log.info (Names[index]+'/'+Names[0]+" "+ Type+ " " + str(orderprice) +" "+str(orderamount))
         try:
-            print("***")
+             
 
-            orderId = tool.createOrderId()
+            orderId =  createOrderId()
             #买入，则开多
             offset = 'open'
             if Type=='sell':
             # 	#卖出，则平多
             	offset = 'close'
 
-            print('try to create:  '+str(Type)+' '+str(orderprice)+' '+str(orderamount))
-
-            pprint(dm.send_contract_order(symbol='BTC', contract_type='quarter', contract_code='', 
+            # print('try to create:  '+str(Type)+' '+str(orderprice)+' '+str(orderamount))
+            log.info('try to create:  '+str(Type)+' '+str(orderprice)+' '+str(orderamount));
+            log.info(dm.send_contract_order(symbol='BTC', contract_type='quarter', contract_code='', 
                                     client_order_id=orderId, price=orderprice, volume=orderamount, direction=Type,
                                     offset=offset, lever_rate=leverRate, order_price_type='limit'))
 
 
 			# print (exchange.createOrder(symbol=Names[index]+'/'+Names[0],side=Type,type='limit',amount=orderamount,price=orderprice))
         except Exception as ex:
-            print (u'##Fail to fetch balance' + str (ex))
+            log.error ('##Fail to fetch balance' + str (ex))
 
             continue
 
 while True:
 	time.sleep(5)#暂停5秒
-	
-	print (u'#################1. 获取火币账号合约余额###################')
+	log.info('#################1. 获取火币账号合约余额###################')
 	try:
-	 
 	 	# res = exchange.fetch_balance()
 	 	accountInfo =  dm.get_contract_account_info()
+	 
  		# funds = res
 	except Exception as ex:
-		print (u'##Fail to fetch balance' + str (ex))
+		log.error('##获取火币合约账户信息失败' + str (ex))
+		log.error(accountInfo)
 		continue
-		 
 	try:
 		for i in range(marketLength):
 		 
 			# Balances[i] = float(funds['free'][Names[i]])+float(funds['used'][Names[i]])
 			# print(Names[i] + ': ' + str(Balances[i]))
 
-		
+			
 			accountSymbol = accountInfo['data'][i]['symbol'] #火币合约账户持有数字货币种类
 			accountFree =  accountInfo['data'][i]['margin_available'] #火币合约账户持有数字货币数量
 		
 			if Names[i]==accountSymbol:
 				Balances[i]=accountFree
 			 
-				print(Names[i] + ': ' + str(Balances[i]))
+				log.info(Names[i] + ': ' + str(Balances[i]))
 		 
 	except Exception as ex:
-		print (u'##Fail to fetch free or used balance' + str(ex))
+		log.error ('##获取火币合约账户数字货币信息失败' + str(ex))
+		log.error(accountInfo)
 		continue
  
 	#################2. Fetch open order###################
-	print (u'#################2. 获取火币合约账号挂单信息###################')
+	log.info ('#################2. 获取火币合约账号挂单信息###################')
 	flagsuc = True
  
 	for i in range(1,  marketLength):
@@ -157,7 +158,7 @@ while True:
 			# print("the openOrder is " + openOrders)
 			#pprint(res)	
 		except Exception as ex:
-			print("error"+str(ex))
+			log.error("error"+str(ex))
 			flagsuc = False
 			break
 		for order in openOrders:
@@ -176,7 +177,10 @@ while True:
 				buyOrders[i].append(info)
 			elif order['direction'] == 'sell':
 				sellOrders[i].append(info)
-		print('##' + Names[i], '\n Buy orders: ', buyOrders[i], '; Sell orders: ', sellOrders[i])
+		log.info('##' + Names[i]+" "+ ' Buy orders: ')
+		log.info( buyOrders[i]) 
+		log.info('Sell orders: ')
+		log.info(sellOrders[i])
 		# for order in orders:
 		# 	info = [order['id'], order['price'], order['amount']]
 		# 	#print (info)
@@ -189,7 +193,7 @@ while True:
 		continue
 	#print (Balances)
 	#################3. Analyse###################
-	print(u'#################3. 买单/卖单操作###################')
+	log.info('#################3. 买单/卖单操作###################')
 	diff = 0
 	for t in range(1, marketLength):
 		initPrice = baseInfo[t]['initPrice']
@@ -255,30 +259,35 @@ while True:
 				sellamount = int(sellamount)#张数，只能取整
 				sellprice = round(sellprice,2)#价格只能取2位数
 				sellTarget.append([sellprice, sellamount,leverRat])
-		print (Names[t],'Target\n','buy:',buyTarget,'\n','sell:',sellTarget)
+		log.info (Names[t]+'  Target')
+		log.info ('buy:')
+		log.info(buyTarget)
+		log.info('sell:')
+		log.info(sellTarget)
 
 		#if (Balances[t] < tradeAmount * orderLength):
        
 		try:
 			holdOrders = dm.get_contract_position_info()['data'] #用户持仓
-			print('用户持仓信息',holdOrders)
+			log.info('用户持仓信息')
+			log.info(holdOrders)
 			holdOrdersLength = len(holdOrders)
 			if holdOrdersLength>=1:
 				holdVolume = holdOrders[0]['volume'];
-				print("the holdVolume is " + str(holdVolume) +'the sellAmount is ' + str(sellAmount))
+				log.info("the holdVolume is " + str(holdVolume) +'the sellAmount is ' + str(sellAmount))
 				# if (Balances[t] < sellAmount):
 				if (holdVolume < sellAmount):
             
                     # if flagShow:
-						print('not enough '+Names[t]+' to create sell orders')
+						log.info('not enough '+Names[t]+' to create sell orders')
 				elif highLimit < sellprice:
                     # if flagShow:
-						print(Names[t]+' is too high')
+						log.info(Names[t]+' is too high')
 				else:
-					print('开始卖出')
+					log.info('开始卖出')
 					checkMyOrders(t, sellOrders[t], sellTarget, 'sell')
 		except Exception as ex:
-			print (u'##未获取到当前用户持仓数据' + str (ex))
+			log.error (u'##未获取到当前用户持仓数据' + str (ex))
 			continue
 
 		
@@ -287,15 +296,17 @@ while True:
         # if (Balances[0] < tradeAmount * buyPrice):
         # if (Balances[0] < tradeAmount * buyPrice):	
 		if (Balances[0] * leverRat   < tradeAmount *  priceUSD / buyPrice):		 
-			print('not enough '+Names[t]+' to create buy orders')
+			log.info('not enough '+Names[t]+' to create buy orders')
 		elif lowLimit > buyprice:
 			if flagShow:
-				print(Names[t]+' is too low')
+				log.info(Names[t]+' is too low')
 		else:
-			print("开始购买")
+			log.info("开始购买")
 			checkMyOrders(t, buyOrders[t], buyTarget, 'buy')
 
 		if flagShow:
-			print ('current Balances:',Balances)
-			print ('you should have ',initCounter+diff,Names[0])
+			log.info ('current Balances:')
+			log.info(Balances)
+			value = initCounter+diff
+			log.info ('you should have '+str(value)+'  '+Names[0])
 			flagShow = False
