@@ -122,7 +122,7 @@ while True:
 		continue
 	try:
 		holdOrders = dm.get_contract_position_info()['data'] #用户持仓
-		log.info('用户持仓信息')
+		log.info('用户持仓信息：')
 		log.info(holdOrders)
 		holdOrdersLength = len(holdOrders)
 
@@ -317,8 +317,7 @@ while True:
 			# if holdOrdersLength>=1:
 			# 	holdVolume = holdOrders[0]['volume'];
 			# 	log.info("the holdVolume is " + str(holdVolume) +'the sellAmount is ' + str(sellAmount))
-			log.info('the Balances '+ str(Balances[t]))
-
+ 
 			if (Balances[t] < sellAmount):
 			# if (holdVolume < sellAmount):
 		
