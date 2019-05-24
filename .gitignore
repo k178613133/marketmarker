@@ -11,3 +11,4 @@ yarn-error.log*
 apikey.json
 
 py-contract/.apikey
+py/.apikey
