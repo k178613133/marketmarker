@@ -10,3 +10,4 @@ yarn-error.log*
 *.iml
 apikey.json
 
+py-contract/.apikey
