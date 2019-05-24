@@ -22,7 +22,7 @@ x.debug("这是一个 debug 级别的问题！")
 
 #读取配置文件
 Info = json.load(open('contract.json')); log.info("配置文件信息读取");log.info(Info)
- 
+
 initCounter = Info['initCounter']
 baseInfo = Info['baseInfo']
 Names = [info['currency'] for info in baseInfo]
@@ -51,6 +51,7 @@ dm = HuobiDM( ACCESS_KEY, SECRET_KEY)
 flagShow = True #是否打印语句
 def checkMyOrders(index, orders, targetOrders, Type):
     temp = [order for order in targetOrders]
+    log.info('the orders is ');log.info(orders)
     uselessOrdersID = []
     for order in orders:
         seq = order[0]
@@ -120,20 +121,40 @@ while True:
 		log.error(accountInfo)
 		continue
 	try:
+		holdOrders = dm.get_contract_position_info()['data'] #用户持仓
+		log.info('用户持仓信息')
+		log.info(holdOrders)
+		holdOrdersLength = len(holdOrders)
+
+	
+
 		for i in range(marketLength):
 		 
 			# Balances[i] = float(funds['free'][Names[i]])+float(funds['used'][Names[i]])
 			# print(Names[i] + ': ' + str(Balances[i]))
-
+			for dataIndex in range(len(accountInfo['data'])):
+				accountSymbol = accountInfo['data'][dataIndex]['symbol'] #火币合约账户持有数字货币种类
+				accountFree =  accountInfo['data'][dataIndex]['margin_available'] #火币合约账户持有数字货币数量
+				
 			
-			accountSymbol = accountInfo['data'][i]['symbol'] #火币合约账户持有数字货币种类
-			accountFree =  accountInfo['data'][i]['margin_available'] #火币合约账户持有数字货币数量
-		
-			if Names[i]==accountSymbol:
-				Balances[i]=accountFree
-			 
-				log.info(Names[i] + ': ' + str(Balances[i]))
-		 
+				
+				if i == 0:
+				    if Names[i]==accountSymbol:
+				    	Balances[i]=accountFree
+				else :
+					holdOrdersLength = len(holdOrders)
+					if holdOrdersLength >=1:
+					    for holdIndex in range(holdOrdersLength):
+					        holdVolume = holdOrders[holdIndex]['volume']#持仓信息
+					        holdSymbol = holdOrders[holdIndex]['symbol']#品种代码 'BTC' 'ETH'
+					        if Names[i]==holdSymbol:
+					        	Balances[i]=holdVolume
+    					
+			
+					# log.critical("the Balances is " );log.critical(Balances)
+					# log.critical(Names[i] + ': ' + str(Balances[i]) +" length is " + str(len(Balances)))
+					# log.info(Names[i] + ': ' + str(Balances[i]))
+		log.critical(Balances)
 	except Exception as ex:
 		log.error ('##获取火币合约账户数字货币信息失败' + str(ex))
 		log.error(accountInfo)
@@ -214,6 +235,8 @@ while True:
 		balanceState = (initBase - Balances[t])/tradeAmount
 		balanceStateBuy = balanceState
 		buyDecimal = balanceStateBuy - math.floor(balanceStateBuy)
+		
+	
 
 		if (buyDecimal < 0.1) :
 			buyDecimal = buyDecimal + 1
@@ -223,6 +246,16 @@ while True:
 		buyAmount = buyDecimal * tradeAmount
 		buyPower = initbuy + balanceStateBuy
 		buyPrice = initPrice * math.pow(rate, buyPower)
+
+		# log.critical('*****************************************************')
+		# log.critical('the tradeAmount is ' + str(tradeAmount))
+		# log.critical('the Balances[t] is ' + str(Balances[t]) + '[t] is ' +str(t))
+		# log.critical('the balanceState is ' + str(balanceState))
+		# log.critical('the balanceStateBuy is ' + str(balanceStateBuy))
+		# log.critical('the initbuy is ' + str(initbuy))
+		# log.critical('the initsell is ' + str(initsell))
+		# log.critical('the buyPower is ' + str(buyPower))
+		# log.critical('the buyPrice is ' + str(buyPrice))
 
 
 		balanceStateSell = balanceState
@@ -259,6 +292,15 @@ while True:
 				sellamount = int(sellamount)#张数，只能取整
 				sellprice = round(sellprice,2)#价格只能取2位数
 				sellTarget.append([sellprice, sellamount,leverRat])
+				
+		# log.critical('the round buyPrice is ' + str(buyPrice))
+		# log.critical (Names[t]+'  Target')
+		# log.critical ('buy:')
+		# log.critical(buyTarget)
+		# log.critical('sell:')
+		# log.critical(sellTarget)
+
+
 		log.info (Names[t]+'  Target')
 		log.info ('buy:')
 		log.info(buyTarget)
@@ -268,24 +310,26 @@ while True:
 		#if (Balances[t] < tradeAmount * orderLength):
        
 		try:
-			holdOrders = dm.get_contract_position_info()['data'] #用户持仓
-			log.info('用户持仓信息')
-			log.info(holdOrders)
-			holdOrdersLength = len(holdOrders)
-			if holdOrdersLength>=1:
-				holdVolume = holdOrders[0]['volume'];
-				log.info("the holdVolume is " + str(holdVolume) +'the sellAmount is ' + str(sellAmount))
-				# if (Balances[t] < sellAmount):
-				if (holdVolume < sellAmount):
-            
-                    # if flagShow:
-						log.info('not enough '+Names[t]+' to create sell orders')
-				elif highLimit < sellprice:
-                    # if flagShow:
-						log.info(Names[t]+' is too high')
-				else:
-					log.info('开始卖出')
-					checkMyOrders(t, sellOrders[t], sellTarget, 'sell')
+			# holdOrders = dm.get_contract_position_info()['data'] #用户持仓
+			# log.info('用户持仓信息')
+			# log.info(holdOrders)
+			# holdOrdersLength = len(holdOrders)
+			# if holdOrdersLength>=1:
+			# 	holdVolume = holdOrders[0]['volume'];
+			# 	log.info("the holdVolume is " + str(holdVolume) +'the sellAmount is ' + str(sellAmount))
+			log.info('the Balances '+ str(Balances[t]))
+
+			if (Balances[t] < sellAmount):
+			# if (holdVolume < sellAmount):
+		
+				# if flagShow:
+					log.info('not enough '+Names[t]+' to create sell orders')
+			elif highLimit < sellprice:
+				# if flagShow:
+					log.info(Names[t]+' is too high')
+			else:
+				log.info('开始卖出')
+				checkMyOrders(t, sellOrders[t], sellTarget, 'sell')
 		except Exception as ex:
 			log.error (u'##未获取到当前用户持仓数据' + str (ex))
 			continue
@@ -294,7 +338,9 @@ while True:
 
         #if (Balances[0] < tradeAmount * orderLength * buyPrice):
         # if (Balances[0] < tradeAmount * buyPrice):
-        # if (Balances[0] < tradeAmount * buyPrice):	
+        # if (Balances[0] < tradeAmount * buyPrice):
+ 
+
 		if (Balances[0] * leverRat   < tradeAmount *  priceUSD / buyPrice):		 
 			log.info('not enough '+Names[t]+' to create buy orders')
 		elif lowLimit > buyprice:
