@@ -149,7 +149,8 @@ while True:
 					        holdSymbol = holdOrders[holdIndex]['symbol']#品种代码 'BTC' 'ETH'
 					        if Names[i]==holdSymbol:
 					        	Balances[i]=holdVolume
-    					
+					else:
+						Balances[i]=0
 			
 					# log.critical("the Balances is " );log.critical(Balances)
 					# log.critical(Names[i] + ': ' + str(Balances[i]) +" length is " + str(len(Balances)))
