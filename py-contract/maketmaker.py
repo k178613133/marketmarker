@@ -21,7 +21,7 @@ x.debug("这是一个 debug 级别的问题！")
 '''
 
 #读取配置文件
-Info = json.load(open('contract.json')); log.info("配置文件信息读取");log.info(Info)
+Info = json.load(open('contract.json')); log.info("#################0. 配置文件信息读取#################");log.info(Info)
 
 initCounter = Info['initCounter']
 baseInfo = Info['baseInfo']
@@ -154,7 +154,7 @@ while True:
 					# log.critical("the Balances is " );log.critical(Balances)
 					# log.critical(Names[i] + ': ' + str(Balances[i]) +" length is " + str(len(Balances)))
 					# log.info(Names[i] + ': ' + str(Balances[i]))
-		log.critical(Balances)
+		log.info("合约账户信息：");log.info(Balances);log.info(Names)
 	except Exception as ex:
 		log.error ('##获取火币合约账户数字货币信息失败' + str(ex))
 		log.error(accountInfo)
@@ -172,6 +172,7 @@ while True:
 			# res = exchange.fetchOpenOrders(symbol = Names[i]+'/'+Names[0])
 			# orders = res
 			# 未成交
+			# 获取挂单信息
 			symbol = Names[i]
 			openOrders =dm.get_contract_history_orders(symbol=symbol, trade_type=0, type=1, status=3, create_date=90)['data']['orders']
 			
@@ -198,7 +199,7 @@ while True:
 				buyOrders[i].append(info)
 			elif order['direction'] == 'sell':
 				sellOrders[i].append(info)
-		log.info('##' + Names[i]+" "+ ' Buy orders: ')
+		log.info('##' + Names[i]);log.info('Buy orders: ')
 		log.info( buyOrders[i]) 
 		log.info('Sell orders: ')
 		log.info(sellOrders[i])
@@ -306,18 +307,18 @@ while True:
 		log.info(buyTarget)
 		log.info('sell:')
 		log.info(sellTarget)
-
+		log.info("the Balances is: " + str(Balances[t]) + "  the sellAmount is: " + str(sellAmount) )
 		#if (Balances[t] < tradeAmount * orderLength):
        
 		try:
-			# holdOrders = dm.get_contract_position_info()['data'] #用户持仓
-			# log.info('用户持仓信息')
-			# log.info(holdOrders)
+			holdOrders = dm.get_contract_position_info()['data'] #用户持仓
+			log.info('用户持仓信息')
+			log.info(holdOrders)
 			# holdOrdersLength = len(holdOrders)
 			# if holdOrdersLength>=1:
 			# 	holdVolume = holdOrders[0]['volume'];
 			# 	log.info("the holdVolume is " + str(holdVolume) +'the sellAmount is ' + str(sellAmount))
- 
+	
 			if (Balances[t] < sellAmount):
 			# if (holdVolume < sellAmount):
 		
@@ -339,6 +340,9 @@ while True:
         # if (Balances[0] < tradeAmount * buyPrice):
         # if (Balances[0] < tradeAmount * buyPrice):
  
+		balacnesRatPrice  = Balances[0] * leverRat
+		ratPrice =  tradeAmount *  priceUSD / buyPrice
+		log.info("the balacnesRatPrice is: " + str(balacnesRatPrice) + "  the ratPrice is: " + str(ratPrice) )
 
 		if (Balances[0] * leverRat   < tradeAmount *  priceUSD / buyPrice):		 
 			log.info('not enough '+Names[t]+' to create buy orders')
