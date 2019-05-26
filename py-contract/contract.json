@@ -8,8 +8,8 @@
 		},
 		{
 			"currency" : "BTC",
-			"initPrice" :8140, 
-			"lowLimit" : 7900, 
+			"initPrice" :8150, 
+			"lowLimit" : 8000, 
 			"highLimit" :8500, 
 			"gap" : 0.5,
 			"rate" : 1.0005, 
