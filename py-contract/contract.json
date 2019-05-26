@@ -11,7 +11,7 @@
 			"initPrice" :8120, 
 			"lowLimit" : 7800, 
 			"highLimit" :8500, 
-			"gap" : 3,
+			"gap" : 1,
 			"rate" : 1.0005, 
 			"initBase" : 0, 
 			"tradeAmount" :1,
