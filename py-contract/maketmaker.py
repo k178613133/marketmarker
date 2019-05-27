@@ -21,7 +21,7 @@ x.debug("这是一个 debug 级别的问题！")
 '''
 
 #读取配置文件
-Info = json.load(open('contract.json')); log.info("#################0. 配置文件信息读取#################");log.info(Info)
+Info = json.load(open('contract.json')); log.info("##################################0. 配置文件信息读取##################################");log.info(Info)
 
 initCounter = Info['initCounter']
 baseInfo = Info['baseInfo']
@@ -64,6 +64,7 @@ def checkMyOrders(index, orders, targetOrders, Type):
            
             if  (abs(myPrice/price - 1) < 0.000001) and  (abs(myIOUAmount/amount - 1) < 0.1) :
                 temp.remove(target)
+                log.info('订单号：' + str(seq) +  ' 价格：' + str(myPrice) + ' 数量： ' + str(amount) + ' 已经挂单，不用再次挂单')
                 flagUseless = False
                 break
         if flagUseless:
@@ -107,7 +108,9 @@ def checkMyOrders(index, orders, targetOrders, Type):
             log.error ('##Fail to fetch balance' + str (ex))
 
             continue
-
+def getUserAccountInfo():
+	#to do
+	log.info("#todo")
 while True:
 	time.sleep(5)#暂停5秒
 	log.info('#################1. 获取火币账号合约余额###################')
@@ -125,9 +128,7 @@ while True:
 		log.info('用户持仓信息：')
 		log.info(holdOrders)
 		holdOrdersLength = len(holdOrders)
-
-	
-
+ 
 		for i in range(marketLength):
 		 
 			# Balances[i] = float(funds['free'][Names[i]])+float(funds['used'][Names[i]])
@@ -249,15 +250,7 @@ while True:
 		buyPower = initbuy + balanceStateBuy
 		buyPrice = initPrice * math.pow(rate, buyPower)
 
-		# log.critical('*****************************************************')
-		# log.critical('the tradeAmount is ' + str(tradeAmount))
-		# log.critical('the Balances[t] is ' + str(Balances[t]) + '[t] is ' +str(t))
-		# log.critical('the balanceState is ' + str(balanceState))
-		# log.critical('the balanceStateBuy is ' + str(balanceStateBuy))
-		# log.critical('the initbuy is ' + str(initbuy))
-		# log.critical('the initsell is ' + str(initsell))
-		# log.critical('the buyPower is ' + str(buyPower))
-		# log.critical('the buyPrice is ' + str(buyPrice))
+ 
 
 
 		balanceStateSell = balanceState
@@ -295,14 +288,7 @@ while True:
 				sellprice = round(sellprice,2)#价格只能取2位数
 				sellTarget.append([sellprice, sellamount,leverRat])
 				
-		# log.critical('the round buyPrice is ' + str(buyPrice))
-		# log.critical (Names[t]+'  Target')
-		# log.critical ('buy:')
-		# log.critical(buyTarget)
-		# log.critical('sell:')
-		# log.critical(sellTarget)
-
-
+ 
 		log.info (Names[t]+'  Target')
 		log.info ('buy:')
 		log.info(buyTarget)
