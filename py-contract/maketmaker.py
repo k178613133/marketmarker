@@ -46,7 +46,7 @@ config.close()
 #初始化，调用火币期货接口
 dm = HuobiDM( ACCESS_KEY, SECRET_KEY)
   
-IS_DEBUG = True
+IS_DEBUG = False
 
 flagShow = True #是否打印语句
 def checkMyOrders(index, orders, targetOrders, Type):
