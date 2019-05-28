@@ -46,7 +46,7 @@ config.close()
 #初始化，调用火币期货接口
 dm = HuobiDM( ACCESS_KEY, SECRET_KEY)
   
-
+IS_DEBUG = True
 
 flagShow = True #是否打印语句
 def checkMyOrders(index, orders, targetOrders, Type):
@@ -316,7 +316,10 @@ while True:
 					log.info(Names[t]+' is too high')
 			else:
 				log.info('开始卖出')
-				checkMyOrders(t, sellOrders[t], sellTarget, 'sell')
+				if IS_DEBUG:
+					log.info('测试，不进行卖出操作')
+				else:
+					checkMyOrders(t, sellOrders[t], sellTarget, 'sell')
 		except Exception as ex:
 			log.error (u'##未获取到当前用户持仓数据' + str (ex))
 			continue
@@ -338,7 +341,11 @@ while True:
 				log.info(Names[t]+' is too low')
 		else:
 			log.info("开始购买")
-			checkMyOrders(t, buyOrders[t], buyTarget, 'buy')
+			# checkMyOrders(t, buyOrders[t], buyTarget, 'buy')
+			if IS_DEBUG:
+					log.info('测试，不进行买入操作')
+			else:
+				checkMyOrders(t, sellOrders[t], sellTarget, 'sell')
 
 		if flagShow:
 			log.info ('current Balances:')
