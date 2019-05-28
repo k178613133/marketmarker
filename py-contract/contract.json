@@ -16,7 +16,7 @@
 			"initBase" : 0, 
 			"tradeAmount" :1,
 			"minAmount":1, 
-			"orderLength" :10,
+			"orderLength" :1,
 			"leverRate":20,
 			"priceUSD":100,
 			"direction":"buy",
