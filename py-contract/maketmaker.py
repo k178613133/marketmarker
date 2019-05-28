@@ -345,7 +345,7 @@ while True:
 			if IS_DEBUG:
 					log.info('测试，不进行买入操作')
 			else:
-				checkMyOrders(t, sellOrders[t], sellTarget, 'sell')
+				checkMyOrders(t, buyOrders[t], buyTarget, 'buy')
 
 		if flagShow:
 			log.info ('current Balances:')
