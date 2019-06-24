@@ -46,7 +46,7 @@ config.close()
 #初始化，调用火币期货接口
 dm = HuobiDM( ACCESS_KEY, SECRET_KEY)
   
-IS_DEBUG = False
+IS_DEBUG = True
 
 flagShow = True #是否打印语句
 def checkMyOrders(index, orders, targetOrders, Type):
@@ -170,14 +170,12 @@ while True:
 		buyOrders[i] = []
 		sellOrders[i] = []
 		try:
-		
 			# res = exchange.fetchOpenOrders(symbol = Names[i]+'/'+Names[0])
 			# orders = res
 			# 未成交
 			# 获取挂单信息
 			symbol = Names[i]
 			openOrders =dm.get_contract_history_orders(symbol=symbol, trade_type=0, type=1, status=3, create_date=90)['data']['orders']
-			
 			# openOrder = openOrders['data'];
 			# print("the openOrder is " + openOrders)
 			#pprint(res)	
@@ -238,8 +236,8 @@ while True:
 		balanceState = (initBase - Balances[t])/tradeAmount
 		balanceStateBuy = balanceState
 		buyDecimal = balanceStateBuy - math.floor(balanceStateBuy)
-		
-	
+
+
 
 		if (buyDecimal < 0.1) :
 			buyDecimal = buyDecimal + 1
@@ -250,7 +248,7 @@ while True:
 		buyPower = initbuy + balanceStateBuy
 		buyPrice = initPrice * math.pow(rate, buyPower)
 
- 
+
 
 
 		balanceStateSell = balanceState
@@ -287,8 +285,7 @@ while True:
 				sellamount = int(sellamount)#张数，只能取整
 				sellprice = round(sellprice,2)#价格只能取2位数
 				sellTarget.append([sellprice, sellamount,leverRat])
-				
- 
+
 		log.info (Names[t]+'  Target')
 		log.info ('buy:')
 		log.info(buyTarget)
@@ -296,7 +293,7 @@ while True:
 		log.info(sellTarget)
 		log.info("the Balances is: " + str(Balances[t]) + "  the sellAmount is: " + str(sellAmount) )
 		#if (Balances[t] < tradeAmount * orderLength):
-       
+
 		try:
 			holdOrders = dm.get_contract_position_info()['data'] #用户持仓
 			log.info('用户持仓信息')
@@ -305,10 +302,10 @@ while True:
 			# if holdOrdersLength>=1:
 			# 	holdVolume = holdOrders[0]['volume'];
 			# 	log.info("the holdVolume is " + str(holdVolume) +'the sellAmount is ' + str(sellAmount))
-	
+
 			if (Balances[t] < sellAmount):
 			# if (holdVolume < sellAmount):
-		
+
 				# if flagShow:
 					log.info('not enough '+Names[t]+' to create sell orders')
 			elif highLimit < sellprice:
@@ -324,12 +321,12 @@ while True:
 			log.error (u'##未获取到当前用户持仓数据' + str (ex))
 			continue
 
-		
+
 
         #if (Balances[0] < tradeAmount * orderLength * buyPrice):
-        # if (Balances[0] < tradeAmount * buyPrice):
-        # if (Balances[0] < tradeAmount * buyPrice):
- 
+        #if (Balances[0] < tradeAmount * buyPrice):
+        #if (Balances[0] < tradeAmount * buyPrice):
+
 		balacnesRatPrice  = Balances[0] * leverRat
 		ratPrice =  tradeAmount *  priceUSD / buyPrice
 		log.info("the balacnesRatPrice is: " + str(balacnesRatPrice) + "  the ratPrice is: " + str(ratPrice) )
@@ -341,7 +338,6 @@ while True:
 				log.info(Names[t]+' is too low')
 		else:
 			log.info("开始购买")
-			# checkMyOrders(t, buyOrders[t], buyTarget, 'buy')
 			if IS_DEBUG:
 					log.info('测试，不进行买入操作')
 			else:
