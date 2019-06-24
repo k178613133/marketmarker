@@ -2,6 +2,7 @@
 
 {	
 	"initCounter" : 0.1 ,
+	"debug":false,
 	"baseInfo":[
 		{
 			"currency" : "BTC"
@@ -11,12 +12,12 @@
 			"initPrice" :11544, 
 			"lowLimit" : 11400, 
 			"highLimit" :11730, 
-			"gap" :4,
+			"gap" :1,
 			"rate" : 1.0005, 
 			"initBase" : 0, 
 			"tradeAmount" :1,
 			"minAmount":1, 
-			"orderLength" :3,
+			"orderLength" :2,
 			"leverRate":1,
 			"priceUSD":100,
 			"direction":"sell",

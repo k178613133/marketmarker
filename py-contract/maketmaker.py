@@ -24,6 +24,7 @@ x.debug("这是一个 debug 级别的问题！")
 Info = json.load(open('contract.json')); log.info("##################################0. 配置文件信息读取##################################");log.info(Info)
 
 initCounter = Info['initCounter']
+IS_DEBUG = Info['debug']
 baseInfo = Info['baseInfo']
 Names = [info['currency'] for info in baseInfo]
 
@@ -46,7 +47,7 @@ config.close()
 #初始化，调用火币期货接口
 dm = HuobiDM( ACCESS_KEY, SECRET_KEY)
   
-IS_DEBUG = True
+#IS_DEBUG = True
 
 flagShow = True #是否打印语句
 def checkMyOrders(index, orders, targetOrders, Type):
